@@ -28,7 +28,11 @@ const Login = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate("/userHomePage");
+      if (userInfo.isAdmin) {
+        navigate("/adminHomePage");
+      } else {
+        navigate("/userHomePage");
+      }
     }
   }, [navigate, userInfo]);
 
@@ -38,7 +42,11 @@ const Login = () => {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
       toast.success("Login Success");
-      navigate("/userHomePage");
+      if (res.isAdmin) {
+        navigate("/adminHomePage");
+      } else {
+        navigate("/userHomePage");
+      }
     } catch (error) {
       toast.error(error?.data?.message || error.error);
     }

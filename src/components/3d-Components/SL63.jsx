@@ -9,7 +9,7 @@ Title: Mersedes-Benz SL63 AMG [Free]
 import React, { useRef } from "react";
 import { useGLTF } from "@react-three/drei";
 
-function Model(props) {
+function SL63(props) {
   const { nodes, materials } = useGLTF("/models/SL63.glb");
   return (
     <group {...props} dispose={null}>
@@ -1980,6 +1980,6 @@ function Model(props) {
   );
 }
 
-export default Model;
+export default SL63;
 
 useGLTF.preload("/models/SL63.glb");

@@ -3,6 +3,8 @@ import { gsap, ScrollTrigger } from "gsap/all";
 import Hero from "../assets/mercedesHero.jpg";
 import "../Home.css";
 import About from "../components/About";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -83,6 +85,15 @@ const Home = () => {
       window.removeEventListener("resize", updateBodyHeight);
     };
   }, []);
+
+  const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (userInfo) {
+      navigate("/userHomePage");
+    }
+  }, [navigate, userInfo]);
 
   return (
     <>

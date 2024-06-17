@@ -11,6 +11,7 @@ import { SiMercedes } from "react-icons/si";
 import { IoEyeSharp } from "react-icons/io5";
 import { BsEyeSlashFill } from "react-icons/bs";
 import Loader from "../components/Loader";
+import { FaCar } from "react-icons/fa";
 
 const Register = () => {
   const [email, setEmail] = useState("");
@@ -18,6 +19,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [vin, setVin] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
@@ -36,13 +38,20 @@ const Register = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
+
     if (password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     } else {
       try {
-        const res = await register({ name, email, password, phone });
-        const userId = res.data._id; // Adjust this based on the actual response structure
+        const res = await register({
+          name,
+          email,
+          password,
+          phone,
+          vin,
+        }).unwrap();
+        const userId = res._id; // Adjust this based on the actual response structure
         console.log(userId);
         navigate("/verify", { state: { userId } });
         toast.success(
@@ -177,6 +186,24 @@ const Register = () => {
               Your Phone Number
             </label>
             <BiPhone className="absolute top-3 right-4" />
+          </div>
+          <div className="relative my-4">
+            <input
+              type="text"
+              className="block w-72 py-2 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:text-white focus:border-blue-600 peer"
+              placeholder=""
+              name="vin"
+              value={vin}
+              onChange={(e) => setVin(e.target.value)}
+              autoComplete="off"
+            />
+            <label
+              htmlFor=""
+              className="absolute text-sm text-white duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+            >
+              Your VIN Number
+            </label>
+            <FaCar className="absolute top-3 right-4" />
           </div>
           <button
             type="submit"

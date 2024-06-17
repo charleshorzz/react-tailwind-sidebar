@@ -1,9 +1,14 @@
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
-import Model from "./SL63"; // Import your car model here
+import CLA45 from "./CLA45"; // Import your car model here
+import SL63 from "./SL63"; // Import your car models here
 
-const RotatingModel = () => {
+const RotatingModel = ({ selectedVehicle }) => {
   const groupRef = useRef();
+
+  useEffect(() => {
+    // This effect ensures that the component re-renders when selectedVehicle changes
+  }, [selectedVehicle]);
 
   useFrame((state, delta) => {
     if (groupRef.current) {
@@ -11,9 +16,21 @@ const RotatingModel = () => {
     }
   });
 
+  let ModelComponent;
+  switch (selectedVehicle?.name) {
+    case "AMG SL63":
+      ModelComponent = SL63;
+      break;
+    case "CLA 45 S Coupe":
+      ModelComponent = CLA45;
+      break;
+    default:
+      ModelComponent = null;
+  }
+
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      <Model />
+      {ModelComponent && <ModelComponent />}
     </group>
   );
 };

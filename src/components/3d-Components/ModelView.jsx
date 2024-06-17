@@ -1,10 +1,13 @@
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import Lights from "./Lights";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import RotatingModel from "./RotatingModel"; // Import the rotating model component
 import * as THREE from "three";
 
-const ModelView = ({ controlRef, setRotation }) => {
+const ModelView = ({ controlRef, setRotation, selectedVehicle }) => {
+  useEffect(() => {
+    // This effect ensures that the component re-renders when selectedVehicle changes
+  }, [selectedVehicle]);
   return (
     <>
       {/* Ambient Light */}
@@ -26,7 +29,7 @@ const ModelView = ({ controlRef, setRotation }) => {
 
       <group position={[0, 0, 0]} scale={[0.9, 0.9, 0.9]}>
         <Suspense fallback={null}>
-          <RotatingModel />
+          <RotatingModel selectedVehicle={selectedVehicle} />
         </Suspense>
       </group>
     </>

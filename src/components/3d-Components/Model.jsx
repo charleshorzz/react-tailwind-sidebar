@@ -2,7 +2,7 @@ import ModelView from "./ModelView";
 import { useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 
-const Model = () => {
+const Model = ({ selectedVehicle }) => {
   const cameraControl = useRef();
   const [rotation, setRotation] = useState(0);
 
@@ -20,7 +20,7 @@ const Model = () => {
         }}
         eventSource={document.getElementById("root")}
       >
-        <ModelView controlRef={cameraControl} setRotation={setRotation} />
+        <ModelView controlRef={cameraControl} setRotation={setRotation} selectedVehicle={selectedVehicle}/>
       </Canvas>
     </div>
   );

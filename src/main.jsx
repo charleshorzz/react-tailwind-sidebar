@@ -23,6 +23,11 @@ import VerificationPage from "./pages/VerificationPage.jsx";
 import VerifyEmailPage from "./pages/ResetPassword/VerifyEmailPage.jsx";
 import UpdatePasswordPage from "./pages/ResetPassword/UpdatePasswordPage.jsx";
 import MaintenanceListPage from "./pages/MaintenanceListPage.jsx";
+import AdminRoute from "./components/AdminRoute.jsx";
+import AdminHomePage from "./pages/admin/AdminHomePage.jsx";
+import AdminPaymentPage from "./pages/admin/AdminPaymentPage.jsx";
+import AdminFeedbackPage from "./pages/admin/AdminFeedbackPage.jsx";
+import AdminSettingsPage from "./pages/admin/AdminSettingsPage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -41,6 +46,13 @@ const router = createBrowserRouter(
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/list" element={<MaintenanceListPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+      </Route>
+
+      <Route path="" element={<AdminRoute />}>
+        <Route path="/adminHomePage" element={<AdminHomePage />} />
+        <Route path="/adminPaymentPage" element={<AdminPaymentPage />} />
+        <Route path="/adminFeedbackPage" element={<AdminFeedbackPage />} />
+        <Route path="/adminSettingsPage" element={<AdminSettingsPage />} />
       </Route>
     </Route>
   )

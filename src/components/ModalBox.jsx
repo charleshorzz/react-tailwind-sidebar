@@ -3,13 +3,26 @@ import { FiAlertCircle } from "react-icons/fi";
 import { useState } from "react";
 import { SiMercedes } from "react-icons/si";
 import { toast } from "react-toastify";
+import { useAddVehicleMutation } from "../slices/vehicleApiSlice";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../slices/authSlice";
 
 const ModalBox = ({ isOpen, setIsOpen }) => {
   const [vin, setVin] = useState("");
+  const [addVehicle] = useAddVehicleMutation();
+  const dispatch = useDispatch();
 
-  const handleaddBtn = () => {
-    setIsOpen(false);
-    toast.success("Your vehicle has been added");
+  const handleaddBtn = async () => {
+    try {
+      const response = await addVehicle({ vin }).unwrap();
+      const updatedUser = response.user;
+      // Optionally, trigger a refetch or update local state to show the new vehicle in the UI
+      dispatch(setCredentials({ ...updatedUser }));
+      setIsOpen(false); // Close the modal after adding the vehicle
+      toast.success("Vehicle has been added");
+    } catch (error) {
+      toast.error(error?.data?.message || error.error);
+    }
   };
 
   return (

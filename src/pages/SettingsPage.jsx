@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import poster from "../assets/poster.png";
@@ -13,6 +13,7 @@ import ModalBox from "../components/ModalBox";
 import HistorySection from "../components/HistorySection";
 import { FaCamera } from "react-icons/fa";
 import camera from "../assets/camera.png";
+import { useGetVehiclesByVINsMutation } from "../slices/vehicleApiSlice";
 
 const tabs = [
   { id: "info", label: "Personal Info" },
@@ -26,6 +27,26 @@ const SettingsPage = () => {
   const [activeTab, setActiveTab] = useState("info");
   const [isOpen, setIsOpen] = useState(false);
   const [profilePic, setProfilePic] = useState(pfp);
+  const [vehicles, setVehicles] = useState([]);
+  const [getVehiclesByVINs] = useGetVehiclesByVINsMutation();
+
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      if (userInfo.vehicles && userInfo.vehicles.length > 0) {
+        const vinList = userInfo.vehicles.map((vehicle) => vehicle.vin);
+        console.log("Fetching vehicles with VINs:", vinList); // Debug log
+        try {
+          const response = await getVehiclesByVINs({ vins: vinList }).unwrap();
+          console.log("Fetched vehicles data:", response); // Debug log
+          setVehicles(response);
+        } catch (error) {
+          console.error("Error fetching vehicles:", error);
+        }
+      }
+    };
+
+    fetchVehicles();
+  }, [userInfo.vehicles, getVehiclesByVINs]);
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
@@ -48,16 +69,15 @@ const SettingsPage = () => {
         return (
           <div className="mt-2 px-5 pb-2 w-[74rem] overflow-x-auto scrollbar-hide scroll-smooth">
             <div className="flex space-x-8">
-              <VehicleCard imgSrc={cla45}>
-                <div className="text-xl font-semibold">CLA 45 S Coupé</div>
-                <div className="text-base my-1">JTC 8904</div>
-                <div className="text-gray-400 my-1">VIN-2109118904</div>
-              </VehicleCard>
-              <VehicleCard imgSrc={sl63}>
-                <div className="text-xl font-semibold">SL63</div>
-                <div className="text-base my-1">AMG 8904</div>
-                <div className="text-gray-400 my-1">VIN-2109118904</div>
-              </VehicleCard>
+              {vehicles.map((vehicle) => (
+                <VehicleCard
+                  key={vehicle.vin}
+                  imgSrc={vehicle.image} // Ensure you have a valid image source
+                  name={vehicle.name}
+                  carPlate={vehicle.carPlate}
+                  vin={vehicle.vin}
+                />
+              ))}
               <button
                 className="relative w-[20rem] h-[19rem] border bg-gray-200 border-gray-100 rounded-2xl shadow-lg group hover:border-gray-300"
                 onClick={() => setIsOpen(true)}

@@ -1,8 +1,22 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useSelector } from "react-redux";
 
-const InvoiceModal = ({ isOpen, setIsOpen }) => {
-  const { userInfo } = useSelector((state) => state.auth);
+const InvoiceModal = ({ isOpen, setIsOpen, history, userInfo }) => {
+  if (!history) return null;
+
+  const getAmountPaid = (type) => {
+    switch (type) {
+      case "Major Service":
+        return 900;
+      case "Regular Service":
+        return 500;
+      case "Checking":
+        return 100;
+      default:
+        return 0;
+    }
+  };
+
+  const amountPaid = getAmountPaid(history.type);
 
   return (
     <AnimatePresence>
@@ -29,8 +43,10 @@ const InvoiceModal = ({ isOpen, setIsOpen }) => {
               <div className="flex justify-between mb-6">
                 <h1 className="text-lg text-black font-bold">Invoice</h1>
                 <div className="text-gray-700">
-                  <div>Date: 25/12/2023</div>
-                  <div>Invoice #: INV12345</div>
+                  <div>
+                    Date: {new Date(history.createdAt).toLocaleDateString()}
+                  </div>
+                  <div>Invoice Id: {history._id}</div>
                 </div>
               </div>
               <div className="mb-8">
@@ -51,23 +67,17 @@ const InvoiceModal = ({ isOpen, setIsOpen }) => {
                 </thead>
                 <tbody>
                   <tr>
-                    <td className="text-left text-gray-700 ">Engine Oil</td>
-                    <td className="text-right text-gray-700">RM50.00</td>
-                  </tr>
-                  <tr>
-                    <td className="text-left text-gray-700">Brake Oil</td>
-                    <td className="text-right text-gray-700">RM50.00</td>
-                  </tr>
-                  <tr>
-                    <td className="text-left text-gray-700">Suspension</td>
-                    <td className="text-right text-gray-700">RM288.00</td>
+                    <td className="text-left text-gray-700">{history.type}</td>
+                    <td className="text-right text-gray-700">
+                      RM{amountPaid}.00
+                    </td>
                   </tr>
                 </tbody>
                 <tfoot>
                   <tr>
                     <td className="text-left font-bold text-gray-700">Total</td>
                     <td className="text-right font-bold text-gray-700">
-                      $225.00
+                      RM{amountPaid}.00
                     </td>
                   </tr>
                 </tfoot>
