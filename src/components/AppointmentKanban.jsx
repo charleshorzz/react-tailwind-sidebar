@@ -12,7 +12,7 @@ import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import { useSelector } from "react-redux";
 
-const AppointmentKanban = ({ selectedDate }) => {
+const AppointmentKanban = ({ selectedDate, isMechanic = false }) => {
   const {
     data: appointments = [],
     isLoading,
@@ -31,13 +31,15 @@ const AppointmentKanban = ({ selectedDate }) => {
   useEffect(() => {
     if (appointments) {
       const filtered = appointments.filter(
-        (appointment) => appointment.location === userInfo?.location
+        (appointment) =>
+          appointment.location === userInfo?.location &&
+          (!isMechanic || appointment.assignedTo === userInfo._id)
       );
       setFilteredAppointments(filtered);
     } else {
       setFilteredAppointments([]);
     }
-  }, [appointments, userInfo]);
+  }, [appointments, userInfo, isMechanic]);
 
   if (isLoading || loadingMechanics) {
     return <div>Loading...</div>;
@@ -50,7 +52,10 @@ const AppointmentKanban = ({ selectedDate }) => {
   return (
     <div className="h-full w-full bg-white text-black p-4">
       {filteredAppointments.length > 0 ? (
-        <Board appointments={filteredAppointments} mechanics={mechanics} />
+        <Board
+          appointments={filteredAppointments}
+          mechanics={mechanics || []}
+        />
       ) : (
         <div>No appointments found.</div>
       )}
@@ -209,7 +214,7 @@ const Column = ({
         mechanicId,
       }).unwrap();
 
-      const mechanic = mechanics.find((m) => m._id === mechanicId);
+      const mechanic = mechanics?.find((m) => m._id === mechanicId);
 
       setCards((prevCards) =>
         prevCards.map((card) =>
@@ -294,7 +299,7 @@ const Card = ({
   };
 
   const assignedMechanic = assignedTo
-    ? mechanics.find((m) => m._id === assignedTo)
+    ? mechanics?.find((m) => m._id === assignedTo)
     : null;
 
   return (
@@ -357,7 +362,7 @@ const Card = ({
               </button>
               {assignDropdownOpen && (
                 <div className="absolute bg-white border mt-2 p-2 rounded shadow-lg z-10">
-                  {mechanics.map((mechanic) => (
+                  {mechanics?.map((mechanic) => (
                     <div
                       key={mechanic._id}
                       className="cursor-pointer hover:bg-gray-200 p-2 rounded"

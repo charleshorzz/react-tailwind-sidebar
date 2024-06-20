@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BiLogOut } from "react-icons/bi";
-import { RiAddBoxLine } from "react-icons/ri";
 import { SiMercedes } from "react-icons/si";
 import { FaEnvelope } from "react-icons/fa6";
+import { RiAddBoxLine } from "react-icons/ri";
 import { NavLink, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useLogoutMutation } from "../slices/usersApiSlice";
@@ -10,8 +10,8 @@ import { logout } from "../slices/authSlice";
 import { IoHome } from "react-icons/io5";
 import { IoIosCalendar, IoMdSettings } from "react-icons/io";
 import { IoMdWallet } from "react-icons/io";
-import { FaClipboardList } from "react-icons/fa";
 import { BiSolidMessageDetail } from "react-icons/bi";
+import { FaClipboardList } from "react-icons/fa";
 import adminLogOut from "../assets/adminLogOut.png";
 
 const Navbar = () => {
@@ -26,7 +26,7 @@ const Navbar = () => {
 
   useEffect(() => {
     if (userInfo) {
-      setOpen(userInfo.isAdmin);
+      setOpen(userInfo.isAdmin || userInfo.isMechanic);
     }
 
     const timer = setInterval(() => {
@@ -81,7 +81,18 @@ const Navbar = () => {
       icon: adminLogOut,
       logOutFunction: true,
       margin: true,
-      isAdmin: true, // Add a flag to identify admin-specific logout
+      isAdmin: true,
+    },
+  ];
+
+  const mechanicMenus = [
+    { name: "Appointments", link: "/mechanicHomePage", icon: FaClipboardList },
+    {
+      name: "Log Out",
+      icon: adminLogOut,
+      logOutFunction: true,
+      margin: true,
+      isAdmin: true,
     },
   ];
 
@@ -92,7 +103,7 @@ const Navbar = () => {
           to={menu?.link}
           key={i}
           onClick={() => menu.logOutFunction && logoutHandler()}
-          className={` ${
+          className={`${
             menu?.margin && "mt-32"
           } group flex items-center text-lg gap-5 font-medium p-2 hover:bg-[#00A19B] hover:bg-opacity-35 rounded-md`}
           activeclassname="active"
@@ -146,11 +157,17 @@ const Navbar = () => {
       >
         <div className="py-1 mt-12 flex justify-center items-center space-x-10">
           <NavLink
-            to={`${userInfo?.isAdmin ? "/adminHomePage" : "/userHomePage"}`}
+            to={
+              userInfo?.isAdmin
+                ? "/adminHomePage"
+                : userInfo?.isMechanic
+                ? "/mechanicHomePage"
+                : "/userHomePage"
+            }
           >
             <SiMercedes size={`${userInfo.isAdmin ? "50" : "30"}`} />
           </NavLink>
-          {userInfo.isAdmin && (
+          {(userInfo.isAdmin || userInfo.isMechanic) && (
             <div className="text-center">
               <div className="text-lg font-semibold">
                 {formatTime(dateTime)}
@@ -162,7 +179,7 @@ const Navbar = () => {
           )}
         </div>
         <div className="">
-          {userInfo?.isAdmin && (
+          {(userInfo?.isAdmin || userInfo?.isMechanic) && (
             <div className="mt-6 items-start">
               <div className="text-center text-sm text-gray-500">
                 Service Center
@@ -172,10 +189,20 @@ const Navbar = () => {
               </div>
             </div>
           )}
+          {userInfo?.isMechanic && (
+            <div className="mt-6 items-start">
+              <div className="text-center text-sm text-gray-500">Mechanic</div>
+              <div className="text-center text-lg text-black font-semibold mt-1">
+                {userInfo.name}
+              </div>
+            </div>
+          )}
         </div>
 
         {userInfo && userInfo.isAdmin
           ? renderMenus(adminMenus)
+          : userInfo?.isMechanic
+          ? renderMenus(mechanicMenus)
           : renderMenus(nonAdminMenus)}
       </div>
     </section>

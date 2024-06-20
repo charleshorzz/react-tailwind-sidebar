@@ -30,6 +30,8 @@ const Login = () => {
     if (userInfo) {
       if (userInfo.isAdmin) {
         navigate("/adminHomePage");
+      } else if (userInfo.isMechanic) {
+        navigate("/mechanicHomePage");
       } else {
         navigate("/userHomePage");
       }
@@ -44,6 +46,8 @@ const Login = () => {
       toast.success("Login Success");
       if (res.isAdmin) {
         navigate("/adminHomePage");
+      } else if (res.isMechanic) {
+        navigate("/mechanicHomePage");
       } else {
         navigate("/userHomePage");
       }

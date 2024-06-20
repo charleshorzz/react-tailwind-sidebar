@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { motion } from "framer-motion";
 import poster from "../assets/poster.png";
-import pfp from "../assets/jj-pfp.jpg";
+import pfp from "../assets/user.png";
 import InfoSection from "../components/InfoSection";
 import FeedbackSection from "../components/FeedbackSection";
 import VehicleCard from "../components/VehicleSection";
-import cla45 from "../assets/cla45.png";
-import sl63 from "../assets/sl63img.jpg";
 import addBtn from "../assets/addBtn.png";
 import ModalBox from "../components/ModalBox";
 import HistorySection from "../components/HistorySection";
-import { FaCamera } from "react-icons/fa";
 import camera from "../assets/camera.png";
 import { useGetVehiclesByVINsMutation } from "../slices/vehicleApiSlice";
 
@@ -121,7 +118,7 @@ const SettingsPage = () => {
                 <img
                   src={profilePic}
                   alt="Profile"
-                  className="absolute top-32 left-6 w-[6.5rem] h-[6.5rem] rounded-full border-4 border-white"
+                  className="absolute top-32 left-6 w-[6.5rem] h-[6.5rem] rounded-full border-4 border-white bg-gray-100"
                 />
                 <input
                   type="file"

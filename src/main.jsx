@@ -28,6 +28,7 @@ import AdminHomePage from "./pages/admin/AdminHomePage.jsx";
 import AdminPaymentPage from "./pages/admin/AdminPaymentPage.jsx";
 import AdminFeedbackPage from "./pages/admin/AdminFeedbackPage.jsx";
 import AdminSettingsPage from "./pages/admin/AdminSettingsPage.jsx";
+import MechanicHomePage from "./pages/MechanicHomePage.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -46,6 +47,7 @@ const router = createBrowserRouter(
         <Route path="/booking" element={<BookingPage />} />
         <Route path="/list" element={<MaintenanceListPage />} />
         <Route path="/settings" element={<SettingsPage />} />
+        <Route path="/mechanicHomePage" element={<MechanicHomePage />} />
       </Route>
 
       <Route path="" element={<AdminRoute />}>

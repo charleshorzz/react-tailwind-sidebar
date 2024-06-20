@@ -5,7 +5,7 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import repairImg from "../assets/repair.png";
 import timingImg from "../assets/timing.png";
 import scheduleImg from "../assets/schedule.png";
-import profilePic from "../assets/jj-pfp.jpg";
+import profilePic from "../assets/user.png";
 import { useGetVehiclesByVINsMutation } from "../slices/vehicleApiSlice.js";
 import AppointmentModal from "../components/AppointmentModal.jsx";
 import { useViewAppointmentsQuery } from "../slices/appointmentSlice.js";
